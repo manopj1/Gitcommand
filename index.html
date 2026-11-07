@@ -1,0 +1,553 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Git Command Reference</title>
+
+<style>
+:root {
+ --bg:#0b1020;
+ --panel:#121a2e;
+ --text:#e8eefc;
+ --muted:#9eabc5;
+ --accent:#62d6a7;
+ --line:#293653;
+ --code:#080d19;
+}
+* {box-sizing:border-box}
+body {
+ margin:0;
+ background:var(--bg);
+ color:var(--text);
+ font:15px/1.6 Arial,sans-serif;
+}
+header {
+ padding:45px 22px;
+ background:linear-gradient(135deg,#203b54,#0b1020);
+ border-bottom:1px solid var(--line);
+}
+.wrap {max-width:1150px;margin:auto}
+h1 {font-size:42px;line-height:1.15;margin:0 0 12px}
+header p {color:var(--muted)}
+.toolbar {
+ display:flex;
+ gap:12px;
+ margin-top:24px;
+ flex-wrap:wrap;
+}
+input,select {
+ background:var(--panel);
+ color:var(--text);
+ border:1px solid var(--line);
+ border-radius:10px;
+ padding:12px;
+ font:inherit;
+}
+input {flex:1;min-width:220px}
+select {min-width:190px}
+main {padding:28px 22px 60px}
+.intro {color:var(--muted)}
+.grid {
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+ gap:16px;
+}
+.card {
+ background:var(--panel);
+ border:1px solid var(--line);
+ border-radius:14px;
+ padding:18px;
+}
+.card h2 {font-size:19px;margin:0 0 6px}
+.desc {color:var(--muted);font-size:14px}
+.command {
+ background:var(--code);
+ border:1px solid #202c43;
+ border-radius:9px;
+ padding:12px;
+ margin:12px 0;
+ position:relative;
+}
+.command code {
+ display:block;
+ white-space:pre-wrap;
+ overflow-wrap:anywhere;
+ color:#b9f4d9;
+ padding-right:55px;
+ font:13px/1.6 Consolas,monospace;
+}
+.copy {
+ position:absolute;
+ right:7px;
+ top:7px;
+ border:1px solid #34435e;
+ background:#17243a;
+ color:white;
+ border-radius:7px;
+ padding:5px 8px;
+ cursor:pointer;
+}
+.copy:hover {color:var(--accent)}
+.example {font-size:13px;color:var(--muted)}
+.note {
+ border-left:3px solid var(--accent);
+ padding:12px;
+ background:#10251f;
+ margin:20px 0;
+}
+.empty {
+ display:none;
+ text-align:center;
+ padding:40px;
+ color:var(--muted);
+}
+footer {
+ text-align:center;
+ color:var(--muted);
+ padding:25px;
+}
+@media(max-width:600px) {
+ h1 {font-size:32px}
+ .toolbar {display:grid}
+ .toolbar>* {width:100%}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="wrap">
+<h1>Git Commands<br>with Examples</h1>
+<p>A practical reference for Git and GitHub commands.</p>
+
+<div class="toolbar">
+<input id="search" type="search"
+placeholder="Search Git commands...">
+
+<select id="category">
+<option value="all">All Categories</option>
+</select>
+</div>
+</div>
+</header>
+
+<main class="wrap">
+
+<p class="intro" id="count"></p>
+
+<div class="note">
+<strong>Important:</strong>
+Run Git commands inside your project directory.
+Replace example filenames, URLs and branch names
+with your actual values.
+</div>
+
+<div class="grid" id="grid"></div>
+<div class="empty" id="empty">
+No matching commands found.
+</div>
+
+</main>
+
+<footer>Git Command Reference</footer>
+
+<script>
+
+const sections = [
+
+{
+category:"Getting Started",
+description:"Configure Git and create repositories.",
+items:[
+
+["git --version",
+"Check installed Git version."],
+
+['git config --global user.name "Your Name"',
+"Set your Git username."],
+
+['git config --global user.email "you@example.com"',
+"Set your Git email address."],
+
+["git config --list",
+"View Git configuration."],
+
+["git init",
+"Create a new Git repository."],
+
+["git clone https://github.com/user/project.git",
+"Download an existing repository."]
+]
+},
+
+{
+category:"Daily Workflow",
+description:"Add, commit and check project changes.",
+items:[
+
+["git status",
+"Show changed and untracked files."],
+
+["git add filename",
+"Add a particular file to staging."],
+
+["git add .",
+"Stage changes in current directory."],
+
+["git add -A",
+"Stage all additions, modifications and deletions."],
+
+['git commit -m "Initial commit"',
+"Save staged changes."],
+
+['git commit -am "Update files"',
+"Commit modifications to tracked files. Does not include new files."],
+
+["git log --oneline",
+"Show compact commit history."],
+
+["git show",
+"Show latest commit details."]
+]
+},
+
+{
+category:"Branches",
+description:"Create, switch and merge branches.",
+items:[
+
+["git branch",
+"List local branches."],
+
+["git branch feature-login",
+"Create a new branch."],
+
+["git switch feature-login",
+"Switch to an existing branch."],
+
+["git switch -c feature-login",
+"Create and switch to a new branch."],
+
+["git merge feature-login",
+"Merge branch into current branch."],
+
+["git branch -d feature-login",
+"Delete a merged local branch."],
+
+["git branch -D feature-login",
+"Force delete a local branch. Use carefully."],
+
+["git branch -a",
+"List local and remote-tracking branches."]
+]
+},
+
+{
+category:"Remote Repositories",
+description:"Manage GitHub remote repositories.",
+items:[
+
+["git remote -v",
+"Show remote repository URLs."],
+
+["git remote add origin https://github.com/user/project.git",
+"Add a GitHub remote."],
+
+["git remote set-url origin https://github.com/user/new.git",
+"Change remote repository URL."],
+
+["git remote remove origin",
+"Remove remote connection from local repository. Does not delete GitHub repository."],
+
+["git push -u origin main",
+"Push main branch and set upstream."],
+
+["git push",
+"Upload local commits."],
+
+["git pull",
+"Download and integrate remote changes."],
+
+["git fetch --all",
+"Download remote updates without merging."],
+
+["git push origin --delete feature-login",
+"Delete a branch from the remote repository."]
+]
+},
+
+{
+category:"Remove Files from Remote",
+description:"Remove pushed files from GitHub and prevent them from being uploaded again.",
+items:[
+
+["git rm --cached filename",
+"Remove a file from Git tracking but KEEP the local copy.",
+"Example: git rm --cached smart-browser-2.4.12965539.deb"],
+
+["git rm filename",
+"Remove a file from Git tracking AND delete the local copy.",
+"Example: git rm old-file.zip"],
+
+['git commit -m "Remove unwanted file"',
+"Commit the file removal."],
+
+["git push origin main",
+"Push the removal commit to GitHub."],
+
+["echo '*.deb' >> .gitignore",
+"Ignore all Debian package files."],
+
+["echo '*.zip' >> .gitignore",
+"Ignore all ZIP files."],
+
+["echo '*.rar' >> .gitignore",
+"Ignore all RAR files."],
+
+["git add .gitignore",
+"Stage the updated ignore file."],
+
+['git commit -m "Update gitignore"',
+"Commit the updated ignore rules."],
+
+["git push origin main",
+"Push updated ignore rules to GitHub."],
+
+["git check-ignore -v filename",
+"Check which ignore rule excludes a file."],
+
+["git filter-repo --path filename --invert-paths",
+"Remove a file from the entire Git history. Requires git-filter-repo. Rewrites history; back up first and coordinate with collaborators."]
+]
+},
+
+{
+category:"Undo & Recovery",
+description:"Undo changes and recover work.",
+items:[
+
+["git restore filename",
+"Discard unstaged changes in a file."],
+
+["git restore --staged filename",
+"Unstage a file without deleting its changes."],
+
+["git reset --soft HEAD~1",
+"Undo latest commit but keep changes staged."],
+
+["git reset --mixed HEAD~1",
+"Undo latest commit and keep changes unstaged."],
+
+["git revert COMMIT_ID",
+"Create a new commit reversing an earlier commit."],
+
+["git stash",
+"Temporarily save working changes."],
+
+["git stash pop",
+"Restore latest stash."],
+
+["git reflog",
+"Show recent HEAD movements."]
+]
+},
+
+{
+category:"Compare & Inspect",
+description:"Inspect changes and history.",
+items:[
+
+["git diff",
+"Show unstaged changes."],
+
+["git diff --staged",
+"Show staged changes."],
+
+["git diff main..feature-login",
+"Compare two branches."],
+
+["git blame filename",
+"Show who last changed each line."],
+
+["git log --oneline --graph --decorate --all",
+"Show graphical commit history."]
+]
+},
+
+{
+category:"Tags & Releases",
+description:"Manage software versions.",
+items:[
+
+["git tag",
+"List tags."],
+
+["git tag v1.0.0",
+"Create a lightweight tag."],
+
+['git tag -a v1.0.0 -m "Version 1.0.0"',
+"Create an annotated tag."],
+
+["git push origin v1.0.0",
+"Push one tag to remote."],
+
+["git push origin --tags",
+"Push all tags."]
+]
+},
+
+{
+category:"Git LFS",
+description:"Manage large files using Git Large File Storage.",
+items:[
+
+["git lfs install",
+"Initialize Git LFS."],
+
+['git lfs track "*.zip"',
+"Track ZIP files using LFS."],
+
+['git lfs track "*.deb"',
+"Track Debian packages using LFS."],
+
+["git lfs ls-files",
+"List LFS-managed files."],
+
+['git lfs migrate import --include="*.zip,*.deb" --everything',
+"Move matching files from Git history into LFS. This rewrites history."]
+]
+},
+
+{
+category:"Useful Tips",
+description:"Additional helpful commands.",
+items:[
+
+["git help -a",
+"List Git commands."],
+
+["git remote show origin",
+"Show remote repository details."],
+
+["git ls-files",
+"List tracked files."],
+
+["git clean -n",
+"Preview untracked files that would be removed."],
+
+["git clean -fd",
+"Delete untracked files and directories. Destructive; preview first."]
+]
+}
+
+];
+
+const grid=document.getElementById("grid");
+const search=document.getElementById("search");
+const category=document.getElementById("category");
+const empty=document.getElementById("empty");
+const count=document.getElementById("count");
+
+sections.forEach(section=>{
+ const option=document.createElement("option");
+ option.value=section.category;
+ option.textContent=section.category;
+ category.appendChild(option);
+});
+
+function render(){
+
+ const q=search.value.toLowerCase().trim();
+ const selected=category.value;
+
+ grid.innerHTML="";
+ let total=0;
+
+ sections
+ .filter(s=>selected==="all" || s.category===selected)
+ .forEach(section=>{
+
+  const items=section.items.filter(item=>
+   item.join(" ").toLowerCase().includes(q)
+  );
+
+  if(!items.length)return;
+
+  total+=items.length;
+
+  const card=document.createElement("section");
+  card.className="card";
+
+  const heading=document.createElement("h2");
+  heading.textContent=section.category;
+  card.appendChild(heading);
+
+  const desc=document.createElement("p");
+  desc.className="desc";
+  desc.textContent=section.description;
+  card.appendChild(desc);
+
+  items.forEach(item=>{
+
+   const [command,description,example]=item;
+
+   const block=document.createElement("div");
+   block.className="command";
+
+   const code=document.createElement("code");
+   code.textContent=command;
+   block.appendChild(code);
+
+   const button=document.createElement("button");
+   button.className="copy";
+   button.textContent="Copy";
+
+   button.addEventListener("click",async()=>{
+
+    try{
+     await navigator.clipboard.writeText(command);
+     button.textContent="Copied!";
+     setTimeout(()=>button.textContent="Copy",1200);
+    }
+    catch(error){
+     button.textContent="Copy unavailable";
+    }
+
+   });
+
+   block.appendChild(button);
+   card.appendChild(block);
+
+   const p=document.createElement("p");
+   p.className="example";
+   p.textContent=description+
+     (example ? " "+example : "");
+
+   card.appendChild(p);
+
+  });
+
+  grid.appendChild(card);
+
+ });
+
+ empty.style.display=total ? "none":"block";
+
+ count.textContent=
+  "Showing "+total+" Git commands in "+
+  grid.children.length+" categories.";
+
+}
+
+search.addEventListener("input",render);
+category.addEventListener("change",render);
+
+render();
+
+</script>
+
+</body>
+</html>
